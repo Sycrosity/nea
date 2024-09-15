@@ -1,0 +1,77 @@
+[workspace]
+resolver = "2"
+members = [
+  "common",
+  "linear-wireless/shared",
+  "linear-wireless/reciever",
+  "linear-wireless/transmitter",
+  "motor-blink",
+]
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Louis Ayme Vernon <l.aymevernon18@latymer-upper.org>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+
+esp-hal = { version = "0.20.1", features = ["async", "embedded-io", "log"] }
+esp-hal-embassy = { version = "0.3.0", features = ["integrated-timers", "log"] }
+esp-backtrace = { version = "0.14.1", features = [
+  "exception-handler",
+  "panic-handler",
+  "println",
+] }
+esp-println = { version = "0.11.0", features = ["auto", "log"] }
+esp-wifi = { version = "0.9.1", features = [
+  "log",
+  "async",
+  "utils",
+  # "wifi",
+  "embassy-net",
+  # "wifi-logs",
+  # "dhcpv4",
+] }
+
+embedded-io = "0.6.1"
+embedded-io-async = "0.6.1"
+embedded-hal = "1.0.0"
+embedded-hal-async = "^1.0"
+embedded-hal-bus = { version = "0.2.0", features = ["async"] }
+
+embassy-executor = { version = "0.6.0", features = ["nightly", "log"] }
+embassy-time = { version = "0.3.2", features = ["log"] }
+embassy-sync = { version = "0.6.0", features = ["log"] }
+embassy-embedded-hal = { version = "0.2.0" }
+embassy-net = { version = "0.4.0", features = ["log"] }
+
+# no-alloc fixed size storage structures
+heapless = { version = "0.8.0", default-features = false }
+
+#the gold standard for logging in rust
+log = "0.4.22"
+
+#implimentation of the c "libm" maths library
+libm = "0.2.8"
+
+#for making static variables at compile time
+static_cell = { version = "2.0.0", features = ["nightly"] }
+
+cfg-if = "1.0.0"
+
+[profile.dev]
+# Rust debug is too slow. 
+# For debug builds always builds with optimization
+opt-level = "s"
+debug = 2
+codegen-units = 1 # LLVM can perform better optimizations using a single thread
+lto = 'fat'
+
+[profile.release]
+codegen-units = 1        # LLVM can perform better optimizations using a single thread
+debug-assertions = false
+incremental = false
+lto = 'fat'
+opt-level = 's'
+overflow-checks = false

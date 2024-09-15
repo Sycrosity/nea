@@ -1,0 +1,6 @@
+[target.'cfg(any(target_arch = "xtensa", target_arch = "riscv32"))']
+runner = "espflash flash --monitor"
+
+[env]
+ESP_LOGLEVEL = "DEBUG"
+ESP_LOGTARGETS = "esp_wifi::compat::timer_compat=warn,esp_wifi::tasks=info"
