@@ -19,16 +19,6 @@ use esp_wifi::{
 };
 use linear_shared::{Colour, Led};
 
-// When you are okay with using a nightly compiler it's better to use https://docs.rs/static_cell/2.1.0/static_cell/macro.make_static.html
-macro_rules! mk_static {
-    ($t:ty, $val:expr) => {{
-        static STATIC_CELL: static_cell::StaticCell<$t> = static_cell::StaticCell::new();
-        #[deny(unused_attributes)]
-        let x = STATIC_CELL.uninit().write(($val));
-        x
-    }};
-}
-
 #[esp_hal_embassy::main]
 async fn main(spawner: Spawner) {
     // To change the log_level change the env section in .cargo/config.toml
