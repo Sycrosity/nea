@@ -37,19 +37,6 @@ async fn main(spawner: Spawner) {
 
     let timg0 = TimerGroup::new(peripherals.TIMG0, &clocks);
 
-    let init = initialize(
-        EspWifiInitFor::Wifi,
-        timg0.timer0,
-        Rng::new(peripherals.RNG),
-        peripherals.RADIO_CLK,
-        &clocks,
-    )
-    .unwrap();
-
-    let wifi = peripherals.WIFI;
-    let esp_now = esp_wifi::esp_now::EspNow::new(&init, wifi).unwrap();
-    debug!("esp-now version: {}", esp_now.get_version().unwrap());
-
     cfg_if::cfg_if! {
         if #[cfg(feature = "esp32")] {
             let timg1 = TimerGroup::new(peripherals.TIMG1, &clocks);
@@ -61,18 +48,40 @@ async fn main(spawner: Spawner) {
         }
     }
 
+    // Initialize ESP-WIFI
+    let init = initialize(
+        EspWifiInitFor::Wifi,
+        timg0.timer0,
+        Rng::new(peripherals.RNG),
+        peripherals.RADIO_CLK,
+        &clocks,
+    )
+    .unwrap();
+
+    // Define the wifi peripheral
+    let wifi = peripherals.WIFI;
+
+    // Initialize ESP-NOW
+    let esp_now = esp_wifi::esp_now::EspNow::new(&init, wifi).unwrap();
+    info!("esp-now version: {}", esp_now.get_version().unwrap());
+
+    // Split the ESP-NOW peripheral into its components
     let (manager, _, receiver) = esp_now.split();
+
     let manager = mk_static!(EspNowManager<'static>, manager);
 
+    // Map the Led colours to the GPIO pins
     let leds = [
         Led::new(AnyOutput::new(io.pins.gpio4, Level::Low), Colour::Red),
         Led::new(AnyOutput::new(io.pins.gpio3, Level::Low), Colour::Yellow),
         Led::new(AnyOutput::new(io.pins.gpio2, Level::Low), Colour::Blue),
     ];
 
+    // Spawn the listener task
     spawner.must_spawn(listener(manager, receiver, leds));
 }
 
+/// A listener task that listens for incoming messages from the transmitter and toggles the corresponding LED
 #[embassy_executor::task]
 async fn listener(
     manager: &'static EspNowManager<'static>,
@@ -80,11 +89,12 @@ async fn listener(
     mut leds: [Led; 3],
 ) {
     loop {
+
+        // Wait for a message to be received
         let r = receiver.receive_async().await;
 
-        let dat = r.data[0];
-
-        if let Some(colour) = Colour::from_u8(dat) {
+        // If the message is able to be converted to a colour, toggle the corresponding LED colour
+        if let Some(colour) = Colour::from_u8(r.data[0]) {
             for led in &mut leds {
                 if colour == led.colour {
                     info!("{} LED toggled", led.colour);
@@ -93,6 +103,7 @@ async fn listener(
             }
         }
 
+        // If the message is a broadcast message and the peer does not exist, add the peer for future communications
         if r.info.dst_address == BROADCAST_ADDRESS && !manager.peer_exists(&r.info.src_address) {
             manager
                 .add_peer(PeerInfo {
