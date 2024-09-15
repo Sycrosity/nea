@@ -1,0 +1,20 @@
+[package]
+name = "common"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+
+log = { workspace = true }
+esp-println = { workspace = true }
+embassy-time = { workspace = true }
+
+[features]
+
+esp32 = ["esp-println/esp32", "esp"]
+
+esp32c3 = ["esp-println/esp32c3", "esp"]
+
+esp = []

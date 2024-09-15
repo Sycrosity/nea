@@ -1,0 +1,46 @@
+[package]
+name = "linear-transmitter"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+esp-hal = { workspace = true }
+esp-hal-embassy.workspace = true
+esp-println.workspace = true
+esp-wifi = { workspace = true, features = ["esp-now", "ipv4", "utils"] }
+esp-backtrace.workspace = true
+
+embassy-executor.workspace = true
+embassy-sync.workspace = true
+embassy-time.workspace = true
+
+static_cell.workspace = true
+cfg-if.workspace = true
+
+common = { path = "../../common" }
+
+linear-shared = { path = "../shared" }
+
+[features]
+
+esp32c3 = [
+  "esp-wifi/esp32c3",
+  "esp-hal/esp32c3",
+  "esp-println/esp32c3",
+  "esp-hal-embassy/esp32c3",
+  "esp-backtrace/esp32c3",
+  "common/esp32c3",
+  "linear-shared/esp32c3",
+]
+
+esp32 = [
+  "esp-wifi/esp32",
+  "esp-hal/esp32",
+  "esp-println/esp32",
+  "esp-hal-embassy/esp32",
+  "esp-backtrace/esp32",
+  "common/esp32",
+  "linear-shared/esp32",
+]

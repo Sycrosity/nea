@@ -1,0 +1,48 @@
+[package]
+name = "motor-blink"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+esp-hal.workspace = true
+esp-hal-embassy.workspace = true
+esp-backtrace.workspace = true
+esp-println.workspace = true
+
+
+embedded-io.workspace = true
+embedded-io-async.workspace = true
+embedded-hal.workspace = true
+embedded-hal-async.workspace = true
+embedded-hal-bus.workspace = true
+
+embassy-executor.workspace = true
+embassy-time.workspace = true
+embassy-sync.workspace = true
+embassy-embedded-hal.workspace = true
+
+log.workspace = true
+libm.workspace = true
+static_cell.workspace = true
+
+common = { path = "../common" }
+
+[features]
+
+esp32 = [
+  "esp-hal/esp32",
+  "esp-hal-embassy/esp32",
+  "esp-backtrace/esp32",
+  "esp-println/esp32",
+  "common/esp32",
+]
+
+esp32c3 = [
+  "esp-hal/esp32c3",
+  "esp-hal-embassy/esp32c3",
+  "esp-backtrace/esp32c3",
+  "esp-println/esp32c3",
+  "common/esp32c3",
+]
