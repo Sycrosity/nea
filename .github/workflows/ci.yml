@@ -2,6 +2,7 @@ name: Continuous Integration
 
 on:
   push:
+    branches: [main]
     paths-ignore:
       - "**/README.md"
   pull_request:
@@ -12,19 +13,38 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
+  fmt:
+    name: Cargo fmt/taplo check
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Rust
+        run: 
+          rustup toolchain install nightly &&
+          rustup component add --toolchain nightly rustfmt
+      - name: Enable caching
+        uses: Swatinem/rust-cache@v2
+      - name: Install Just
+        uses: taiki-e/install-action@just
+      - uses: uncenter/setup-taplo@v1
+        with:
+          version: "0.8.1"
+      - run: taplo fmt foo.toml --check
+      - name: Run command
+        run: just _ci_fmt
+
   rust-checks:
-    name: Rust Checks
+    name: Cargo ${{ matrix.just }} (${{ matrix.package }}, ${{ matrix.board }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        action:
-          - command: build
-            args: --release
-          - command: fmt
-            args: --all -- --check --color always
-          - command: clippy
-            args: --all-features --workspace -Z build-std=alloc -- -D warnings
+        just: ["build","clippy"]
+        board: ["esp32", "esp32c3"]
+        package: ["common", "linear-transmitter", "linear-shared", "linear-receiver", "motor-blink"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,9 +52,33 @@ jobs:
         uses: esp-rs/xtensa-toolchain@v1.5
         with:
           default: true
-          buildtargets: esp32
           ldproxy: false
       - name: Enable caching
         uses: Swatinem/rust-cache@v2
+      - name: Install Just
+        uses: taiki-e/install-action@just
       - name: Run command
-        run: cargo ${{ matrix.action.command }} ${{ matrix.action.args }}
+        run: just _ci_${{ matrix.just }} ${{ matrix.package }} ${{ matrix.board }}
+
+  rust-tests:
+    name: Cargo nextest (${{ matrix.package }}, ${{ matrix.board }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        board: ["esp32", "esp32c3"]
+        package: ["common", "linear-shared"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: esp-rs/xtensa-toolchain@v1.5
+        with:
+          default: true
+          ldproxy: false
+      - name: Enable caching
+        uses: Swatinem/rust-cache@v2
+      - name: Install Just
+        uses: taiki-e/install-action@just
+      - name: Run command
+        run: just _ci_test ${{ matrix.package }} ${{ matrix.board }}
