@@ -67,6 +67,7 @@ opt-level = "s"
 debug = 2
 codegen-units = 1 # LLVM can perform better optimizations using a single thread
 lto = 'fat'
+overflow-checks = false
 
 [profile.release]
 codegen-units = 1        # LLVM can perform better optimizations using a single thread

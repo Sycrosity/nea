@@ -2,13 +2,15 @@
 #![no_main]
 #![feature(impl_trait_in_assoc_type)]
 
+mod blink;
+
 use common::prelude::*;
 use embassy_executor::Spawner;
 use embassy_sync::{blocking_mutex::raw::NoopRawMutex, mutex::Mutex};
 use esp_backtrace as _;
 use esp_hal::{
     clock::ClockControl,
-    gpio::{AnyInput, Io, Pull},
+    gpio::{AnyInput, AnyOutput, Io, Pull, Level},
     peripherals::Peripherals,
     rng::Rng,
     system::SystemControl,
@@ -82,6 +84,8 @@ async fn main(spawner: Spawner) {
         Button::new(AnyInput::new(io.pins.gpio10, Pull::Up), Colour::Yellow),
         Button::new(AnyInput::new(io.pins.gpio5, Pull::Up), Colour::Blue),
     ];
+
+    spawner.must_spawn(blink::blink(AnyOutput::new(io.pins.gpio8, Level::Low)));
 
     // Spawn a broadcaster task for each button
     for button in buttons {

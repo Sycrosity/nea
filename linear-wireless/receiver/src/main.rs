@@ -2,6 +2,8 @@
 #![no_main]
 #![feature(impl_trait_in_assoc_type)]
 
+mod blink;
+
 use common::prelude::*;
 use embassy_executor::Spawner;
 use esp_backtrace as _;
@@ -74,8 +76,10 @@ async fn main(spawner: Spawner) {
     let leds = [
         Led::new(AnyOutput::new(io.pins.gpio4, Level::Low), Colour::Red),
         Led::new(AnyOutput::new(io.pins.gpio3, Level::Low), Colour::Yellow),
-        Led::new(AnyOutput::new(io.pins.gpio2, Level::Low), Colour::Blue),
+        Led::new(AnyOutput::new(io.pins.gpio1, Level::Low), Colour::Blue),
     ];
+
+    spawner.must_spawn(blink::blink(AnyOutput::new(io.pins.gpio8, Level::Low)));
 
     // Spawn the listener task
     spawner.must_spawn(listener(manager, receiver, leds));
