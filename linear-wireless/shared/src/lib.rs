@@ -3,7 +3,7 @@ use core::fmt::Display;
 #[cfg(test)]
 use std::prelude::rust_2021::*;
 
-use esp_hal::gpio::{AnyInput, AnyOutput};
+use embedded_hal::digital::{InputPin, OutputPin};
 
 const RESET: &str = "\u{001B}[0m";
 const RED: &str = "\u{001B}[31m";
@@ -45,24 +45,35 @@ impl Colour {
     }
 }
 
-pub struct Led {
-    pub pin: AnyOutput<'static>,
+#[test]
+fn test_colours() {
+    assert_eq!(Colour::Red.to_u8(), 0);
+    assert_eq!(Colour::Yellow.to_u8(), 1);
+    assert_eq!(Colour::Blue.to_u8(), 2);
+    assert_eq!(Colour::from_u8(0), Some(Colour::Red));
+    assert_eq!(Colour::from_u8(1), Some(Colour::Yellow));
+    assert_eq!(Colour::from_u8(2), Some(Colour::Blue));
+    assert_eq!(Colour::from_u8(3), None);
+}
+
+pub struct Led<Pin: OutputPin> {
+    pub pin: Pin,
     pub colour: Colour,
 }
 
-impl Led {
-    pub fn new(pin: AnyOutput<'static>, colour: Colour) -> Self {
+impl<Pin: OutputPin> Led<Pin> {
+    pub fn new(pin: Pin, colour: Colour) -> Self {
         Self { pin, colour }
     }
 }
 
-pub struct Button {
-    pub pin: AnyInput<'static>,
+pub struct Button<Pin: InputPin> {
+    pub pin: Pin,
     pub colour: Colour,
 }
 
-impl Button {
-    pub fn new(pin: AnyInput<'static>, colour: Colour) -> Self {
+impl<Pin: InputPin> Button<Pin> {
+    pub fn new(pin: Pin, colour: Colour) -> Self {
         Self { pin, colour }
     }
 }

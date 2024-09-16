@@ -844,7 +844,7 @@ dependencies = [
 name = "linear-shared"
 version = "0.1.0"
 dependencies = [
- "esp-hal",
+ "embedded-hal 1.0.0",
 ]
 
 [[package]]

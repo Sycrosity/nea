@@ -6,10 +6,10 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-esp-hal = { workspace = true }
+embedded-hal.workspace = true
 
 [features]
 
-esp32c3 = ["esp-hal/esp32c3"]
+esp32 = []
 
-esp32 = ["esp-hal/esp32"]
+esp32c3 = []
