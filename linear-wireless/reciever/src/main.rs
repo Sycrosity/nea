@@ -81,19 +81,20 @@ async fn main(spawner: Spawner) {
     spawner.must_spawn(listener(manager, receiver, leds));
 }
 
-/// A listener task that listens for incoming messages from the transmitter and toggles the corresponding LED
+/// A listener task that listens for incoming messages from the transmitter and
+/// toggles the corresponding LED
 #[embassy_executor::task]
 async fn listener(
     manager: &'static EspNowManager<'static>,
     mut receiver: EspNowReceiver<'static>,
-    mut leds: [Led; 3],
+    mut leds: [Led<AnyOutput<'static>>; 3],
 ) {
     loop {
-
         // Wait for a message to be received
         let r = receiver.receive_async().await;
 
-        // If the message is able to be converted to a colour, toggle the corresponding LED colour
+        // If the message is able to be converted to a colour, toggle the corresponding
+        // LED colour
         if let Some(colour) = Colour::from_u8(r.data[0]) {
             for led in &mut leds {
                 if colour == led.colour {
@@ -103,7 +104,8 @@ async fn listener(
             }
         }
 
-        // If the message is a broadcast message and the peer does not exist, add the peer for future communications
+        // If the message is a broadcast message and the peer does not exist, add the
+        // peer for future communications
         if r.info.dst_address == BROADCAST_ADDRESS && !manager.peer_exists(&r.info.src_address) {
             manager
                 .add_peer(PeerInfo {

@@ -6,7 +6,7 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-esp-hal = { workspace = true }
+esp-hal.workspace = true
 esp-hal-embassy.workspace = true
 esp-println.workspace = true
 esp-wifi = { workspace = true, features = ["esp-now", "ipv4", "utils"] }
@@ -32,7 +32,6 @@ esp32c3 = [
   "esp-hal-embassy/esp32c3",
   "esp-backtrace/esp32c3",
   "common/esp32c3",
-  "linear-shared/esp32c3",
 ]
 
 esp32 = [
@@ -42,5 +41,4 @@ esp32 = [
   "esp-hal-embassy/esp32",
   "esp-backtrace/esp32",
   "common/esp32",
-  "linear-shared/esp32",
 ]

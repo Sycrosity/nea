@@ -69,7 +69,8 @@ async fn main(spawner: Spawner) {
     // Split the ESP-NOW peripheral into its components
     let (_, sender, _) = esp_now.split();
 
-    // Create a shared Mutable reference to the sender, allowing multiple buttons to send messages independently
+    // Create a shared Mutable reference to the sender, allowing multiple buttons to
+    // send messages independently
     let sender = mk_static!(
         Mutex::<NoopRawMutex, EspNowSender<'static>>,
         Mutex::<NoopRawMutex, _>::new(sender)
@@ -89,14 +90,14 @@ async fn main(spawner: Spawner) {
     }
 }
 
-/// Task that listens for button presses and sends a message when a button is pressed.
+/// Task that listens for button presses and sends a message when a button is
+/// pressed.
 #[embassy_executor::task(pool_size = 3)]
 async fn broadcaster(
     sender: &'static Mutex<NoopRawMutex, EspNowSender<'static>>,
-    mut button: Button,
+    mut button: Button<AnyInput<'static>>,
 ) {
     loop {
-
         button.pin.wait_for_rising_edge().await;
 
         trace!("{} button pressed", button.colour);
@@ -115,6 +116,6 @@ async fn broadcaster(
 
         // Debounce the button, preventing it from accidentally counting as being
         // pressed again too quickly.
-        Timer::after_millis(50).await;
+        Timer::after_millis(100).await;
     }
 }

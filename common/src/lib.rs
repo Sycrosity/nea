@@ -22,6 +22,5 @@ pub mod prelude {
     pub use esp_println::{print, println};
     pub use log::{debug, error, info, log, trace, warn};
 
-    pub use crate::errors::*;
-    pub use crate::mk_static;
+    pub use crate::{errors::*, mk_static};
 }
