@@ -3,6 +3,7 @@
 #![feature(type_alias_impl_trait)]
 #![feature(impl_trait_in_assoc_type)]
 #![feature(cfg_match)]
+#![allow(unused_variables)]
 
 use embassy_executor::Spawner;
 use esp_hal::{
@@ -12,7 +13,6 @@ use esp_hal::{
     peripherals::{Peripherals, ADC1},
     rng::Rng,
     system::SystemControl,
-    timer::timg::TimerGroup,
 };
 use esp_println::println;
 use motor_blink::{blink::blink, prelude::*};
@@ -35,9 +35,9 @@ async fn main(spawner: Spawner) {
 
     let clocks = ClockControl::max(system.clock_control).freeze();
 
-    #[cfg(feature = "esp32")]
+    #[cfg(feature = "esp32c3")]
     {
-        let timg1 = TimerGroup::new(peripherals.TIMG1, &clocks);
+        let timg1 = esp_hal::timer::timg::TimerGroup::new(peripherals.TIMG1, &clocks);
 
         esp_hal_embassy::init(&clocks, timg1.timer0);
     }
