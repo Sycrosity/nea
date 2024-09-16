@@ -1,5 +1,5 @@
 [package]
-name = "linear-reciever"
+name = "linear-receiver"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
