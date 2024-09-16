@@ -3,7 +3,7 @@ resolver = "2"
 members = [
   "common",
   "linear-wireless/shared",
-  "linear-wireless/reciever",
+  "linear-wireless/receiver",
   "linear-wireless/transmitter",
   "motor-blink",
 ]
