@@ -11,7 +11,7 @@ use esp_hal::{
     gpio::{Io, Level},
     peripherals::{Peripherals, ADC1},
     rng::Rng,
-    system::SystemControl,
+    system::SystemControl, timer::timg::TimerGroup,
 };
 use esp_println::println;
 use motor_blink::{blink::blink, prelude::*};

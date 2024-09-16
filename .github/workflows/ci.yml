@@ -80,5 +80,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
       - name: Install Just
         uses: taiki-e/install-action@just
+      - name: Install Nextest
+        uses: taiki-e/install-action@nextest
       - name: Run command
         run: just _ci_test ${{ matrix.package }} ${{ matrix.board }}
