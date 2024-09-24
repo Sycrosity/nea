@@ -174,6 +174,7 @@ name = "common"
 version = "0.1.0"
 dependencies = [
  "embassy-time",
+ "embedded-hal 1.0.0",
  "esp-println",
  "log",
 ]
@@ -823,7 +824,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4ec2a862134d2a7d32d7983ddcdd1c4923530833c9f2ea1a44fc5fa473989058"
 
 [[package]]
-name = "linear-receiver"
+name = "linear-led-receiver"
 version = "0.1.0"
 dependencies = [
  "cfg-if",
@@ -836,19 +837,19 @@ dependencies = [
  "esp-hal-embassy",
  "esp-println",
  "esp-wifi",
- "linear-shared",
+ "linear-led-shared",
  "static_cell",
 ]
 
 [[package]]
-name = "linear-shared"
+name = "linear-led-shared"
 version = "0.1.0"
 dependencies = [
  "embedded-hal 1.0.0",
 ]
 
 [[package]]
-name = "linear-transmitter"
+name = "linear-led-transmitter"
 version = "0.1.0"
 dependencies = [
  "cfg-if",
@@ -861,7 +862,50 @@ dependencies = [
  "esp-hal-embassy",
  "esp-println",
  "esp-wifi",
- "linear-shared",
+ "linear-led-shared",
+ "static_cell",
+]
+
+[[package]]
+name = "linear-motor-receiver"
+version = "0.1.0"
+dependencies = [
+ "cfg-if",
+ "common",
+ "embassy-executor",
+ "embassy-sync 0.6.0",
+ "embassy-time",
+ "esp-backtrace",
+ "esp-hal",
+ "esp-hal-embassy",
+ "esp-println",
+ "esp-wifi",
+ "linear-motor-shared",
+ "static_cell",
+]
+
+[[package]]
+name = "linear-motor-shared"
+version = "0.1.0"
+dependencies = [
+ "embedded-hal 1.0.0",
+]
+
+[[package]]
+name = "linear-motor-transmitter"
+version = "0.1.0"
+dependencies = [
+ "cfg-if",
+ "common",
+ "embassy-executor",
+ "embassy-sync 0.6.0",
+ "embassy-time",
+ "esp-backtrace",
+ "esp-hal",
+ "esp-hal-embassy",
+ "esp-println",
+ "esp-wifi",
+ "linear-motor-shared",
  "static_cell",
 ]
 

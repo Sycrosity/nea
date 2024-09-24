@@ -7,9 +7,10 @@ license.workspace = true
 
 [dependencies]
 
-log = { workspace = true }
-esp-println = { workspace = true }
-embassy-time = { workspace = true }
+log.workspace = true
+esp-println.workspace = true
+embassy-time.workspace = true
+embedded-hal.workspace = true
 
 [features]
 

@@ -1,5 +1,5 @@
 [package]
-name = "linear-receiver"
+name = "linear-motor-receiver"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
@@ -21,7 +21,7 @@ cfg-if.workspace = true
 
 common = { path = "../../common" }
 
-linear-shared = { path = "../shared" }
+shared = { path = "../shared", package = "linear-motor-shared" }
 
 [features]
 

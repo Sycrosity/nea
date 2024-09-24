@@ -2,9 +2,12 @@
 resolver = "2"
 members = [
   "common",
-  "linear-wireless/shared",
-  "linear-wireless/receiver",
-  "linear-wireless/transmitter",
+  "linear-wireless-led/shared",
+  "linear-wireless-led/receiver",
+  "linear-wireless-led/transmitter",
+  "linear-wireless-motor/shared",
+  "linear-wireless-motor/receiver",
+  "linear-wireless-motor/transmitter",
   "motor-blink",
 ]
 
@@ -65,8 +68,9 @@ cfg-if = "1.0.0"
 # For debug builds always builds with optimization
 opt-level = "s"
 debug = 2
-codegen-units = 1 # LLVM can perform better optimizations using a single thread
+codegen-units = 1       # LLVM can perform better optimizations using a single thread
 lto = 'fat'
+overflow-checks = false
 
 [profile.release]
 codegen-units = 1        # LLVM can perform better optimizations using a single thread

@@ -7,11 +7,9 @@
 
 use embassy_executor::Spawner;
 use esp_hal::{
-    analog::adc::{Adc, AdcConfig},
     clock::ClockControl,
     gpio::{Io, Level},
-    peripherals::{Peripherals, ADC1},
-    rng::Rng,
+    peripherals::Peripherals,
     system::SystemControl,
 };
 use esp_println::println;
@@ -35,7 +33,7 @@ async fn main(spawner: Spawner) {
 
     let clocks = ClockControl::max(system.clock_control).freeze();
 
-    #[cfg(feature = "esp32c3")]
+    #[cfg(feature = "esp32")]
     {
         let timg1 = esp_hal::timer::timg::TimerGroup::new(peripherals.TIMG1, &clocks);
 
@@ -50,10 +48,10 @@ async fn main(spawner: Spawner) {
         esp_hal_embassy::init(&clocks, systimer.alarm0);
     }
 
-    let adc1_config = AdcConfig::new();
+    // let adc1_config = AdcConfig::new();
 
-    let rng = Rng::new(peripherals.RNG);
-    let mut _rng = *RNG.init(rng);
+    // let rng = Rng::new(peripherals.RNG);
+    // let mut _rng = *RNG.init(rng);
 
     // let pot_pin = io.pins.gpio3;
     // let pot_pin = adc1_config.enable_pin::<_>(pot_pin,
@@ -61,8 +59,9 @@ async fn main(spawner: Spawner) {
     // adc1_config.enable_pin_with_cal::<_, AdcCalCurve<ADC1>>(pot_pin,
     // Attenuation::Attenuation11dB);
 
-    let _adc1 =
-        &*SHARED_ADC.init_with(|| Mutex::new(Adc::<ADC1>::new(peripherals.ADC1, adc1_config)));
+    // let _adc1 =
+    //     &*SHARED_ADC.init_with(|| Mutex::new(Adc::<ADC1>::new(peripherals.ADC1,
+    // adc1_config)));
 
     #[cfg(feature = "esp32")]
     let internal_led = AnyOutput::new(io.pins.gpio2, Level::Low);
@@ -73,9 +72,12 @@ async fn main(spawner: Spawner) {
 
     // let motor_pin = io.pins.gpio32;
 
-    let motor_pin = io.pins.gpio7;
+    let motor_pin_l = io.pins.gpio9;
+    let motor_pin_r = io.pins.gpio3;
 
     // let motor_pin = io.pins.gpio25;
 
-    spawner.must_spawn(blink(AnyOutput::new(motor_pin, Level::High)));
+    spawner.must_spawn(blink(AnyOutput::new(motor_pin_r, Level::High)));
+
+    spawner.must_spawn(blink(AnyOutput::new(motor_pin_l, Level::Low)));
 }
