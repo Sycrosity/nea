@@ -10,7 +10,7 @@ use embassy_sync::{blocking_mutex::raw::NoopRawMutex, mutex::Mutex};
 use esp_backtrace as _;
 use esp_hal::{
     clock::ClockControl,
-    gpio::{AnyInput, AnyOutput, Io, Pull, Level},
+    gpio::{AnyInput, AnyOutput, Io, Level, Pull},
     peripherals::Peripherals,
     rng::Rng,
     system::SystemControl,
@@ -20,7 +20,7 @@ use esp_wifi::{
     esp_now::{EspNowSender, BROADCAST_ADDRESS},
     initialize, EspWifiInitFor,
 };
-use linear_shared::{Button, Colour};
+use shared::{Button, Colour};
 
 #[esp_hal_embassy::main]
 async fn main(spawner: Spawner) {

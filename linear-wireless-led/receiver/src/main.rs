@@ -19,7 +19,7 @@ use esp_wifi::{
     esp_now::{EspNowManager, EspNowReceiver, PeerInfo, BROADCAST_ADDRESS},
     initialize, EspWifiInitFor,
 };
-use linear_shared::{Colour, Led};
+use shared::{Colour, Led};
 
 #[esp_hal_embassy::main]
 async fn main(spawner: Spawner) {

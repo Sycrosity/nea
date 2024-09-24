@@ -1,0 +1,15 @@
+[package]
+name = "linear-led-shared"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+embedded-hal.workspace = true
+
+[features]
+
+esp32 = []
+
+esp32c3 = []

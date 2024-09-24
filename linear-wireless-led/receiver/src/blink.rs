@@ -1,6 +1,5 @@
-use esp_hal::gpio::AnyOutput;
-
 use common::prelude::*;
+use esp_hal::gpio::AnyOutput;
 
 #[embassy_executor::task(pool_size = 2)]
 pub async fn blink(mut led: AnyOutput<'static>) {

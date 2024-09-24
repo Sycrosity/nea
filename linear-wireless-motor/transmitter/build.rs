@@ -10,5 +10,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     // esp-hal requires this
     println!("cargo::rustc-link-arg=-Tlinkall.x");
 
+    // esp-wifi requires this
+    println!("cargo::rustc-link-arg=-Trom_functions.x");
+
     Ok(())
 }
