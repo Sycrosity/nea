@@ -15,12 +15,15 @@ esp-backtrace.workspace = true
 embassy-executor.workspace = true
 embassy-sync.workspace = true
 embassy-time.workspace = true
+embassy-futures.workspace = true
+
 
 static_cell.workspace = true
 cfg-if.workspace = true
 
-common = { path = "../../common" }
+# rotary-encoder-hal.workspace = true
 
+common = { path = "../../common" }
 shared = { path = "../shared", package = "linear-motor-shared" }
 
 [features]

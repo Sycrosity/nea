@@ -77,8 +77,14 @@ async fn main(spawner: Spawner) {
     let motor_pin_r = io.pins.gpio3;
 
     let motors = [
-        Motor::new(AnyOutput::new(motor_pin_l, Level::Low), Direction::Left),
-        Motor::new(AnyOutput::new(motor_pin_r, Level::Low), Direction::Right),
+        Motor::new(
+            AnyOutput::new(motor_pin_l, Level::Low),
+            Direction::Clockwise,
+        ),
+        Motor::new(
+            AnyOutput::new(motor_pin_r, Level::Low),
+            Direction::CounterClockwise,
+        ),
     ];
 
     spawner.must_spawn(blink::blink(AnyOutput::new(internal_led, Level::Low)));
@@ -99,14 +105,17 @@ async fn listener(
         // Wait for a message to be received
         let r = receiver.receive_async().await;
 
-        // If the message is able to be converted to a colour, toggle the corresponding
-        // LED colour
-        if let Some(direction) = Direction::from_u8(r.data[0]) {
-            for motor in &mut motors {
-                if direction == motor.direction {
-                    info!("{} MOTOR toggled", motor.direction);
-                    motor.pin.toggle();
-                }
+        // If the message is able to be converted, toggle the corresponding motor
+        for motor in &mut motors {
+            if Direction::try_from(r.data[0]) == Ok(motor.direction) {
+                info!("{} MOTOR toggled", {
+                    if motor.direction == Direction::Clockwise {
+                        "Left"
+                    } else {
+                        "Right"
+                    }
+                });
+                motor.pin.toggle();
             }
         }
 

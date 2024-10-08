@@ -4,7 +4,6 @@ use std::prelude::rust_2021::*;
 
 pub mod errors;
 pub mod logger;
-// pub mod blink;
 
 /// A simplified version of [`make_static`](`static_cell::make_static`), while [rust-analyzer#13824](https://github.com/rust-lang/rust-analyzer/issues/13824) exists (due to TAIT not being stable yet: [rust#120700](https://github.com/rust-lang/rust/pull/120700)).
 #[macro_export]

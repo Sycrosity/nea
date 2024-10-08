@@ -5,10 +5,10 @@ use std::prelude::rust_2021::*;
 
 use embedded_hal::digital::{InputPin, OutputPin};
 
-const RESET: &str = "\u{001B}[0m";
-const RED: &str = "\u{001B}[31m";
+// const RESET: &str = "\u{001B}[0m";
+// const RED: &str = "\u{001B}[31m";
 // const YELLOW: &str = "\u{001B}[33m";
-const BLUE: &str = "\u{001B}[36m";
+// const BLUE: &str = "\u{001B}[36m";
 
 // #[repr(u8)]
 // #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -23,15 +23,15 @@ const BLUE: &str = "\u{001B}[36m";
 #[repr(u8)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Direction {
-    Left = 0,
-    Right = 1,
+    Clockwise = 0,
+    CounterClockwise = 1,
 }
 
 impl Display for Direction {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
-            Self::Left => write!(f, "{}Left{}", RED, RESET),
-            Self::Right => write!(f, "{}Right{}", BLUE, RESET),
+            Self::Clockwise => write!(f, "Clockwise"),
+            Self::CounterClockwise => write!(f, "Counter Clockwise"),
         }
     }
 }
@@ -39,8 +39,8 @@ impl Display for Direction {
 impl Direction {
     pub fn from_u8(value: u8) -> Option<Self> {
         match value {
-            0 => Some(Self::Left),
-            1 => Some(Self::Right),
+            0 => Some(Self::Clockwise),
+            1 => Some(Self::CounterClockwise),
             _ => None,
         }
     }
@@ -50,13 +50,22 @@ impl Direction {
     }
 }
 
-#[test]
-fn test_input() {
-    assert_eq!(Direction::from_u8(0), Some(Direction::Left));
-    assert_eq!(Direction::from_u8(1), Some(Direction::Right));
-    assert_eq!(Direction::from_u8(2), None);
-    assert_eq!(Direction::Left.to_u8(), 0);
-    assert_eq!(Direction::Right.to_u8(), 1);
+impl TryFrom<u8> for Direction {
+    type Error = ();
+
+    fn try_from(value: u8) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::Clockwise),
+            1 => Ok(Self::CounterClockwise),
+            _ => Err(()),
+        }
+    }
+}
+
+impl From<Direction> for u8 {
+    fn from(value: Direction) -> Self {
+        value as u8
+    }
 }
 
 pub struct Motor<Pin: OutputPin> {

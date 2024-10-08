@@ -48,6 +48,9 @@ embassy-time = { version = "0.3.2", features = ["log"] }
 embassy-sync = { version = "0.6.0", features = ["log"] }
 embassy-embedded-hal = { version = "0.2.0" }
 embassy-net = { version = "0.4.0", features = ["log"] }
+embassy-futures = { version = "0.1.1", features = ["log"] }
+
+# rotary-encoder-hal = "0.5.0"
 
 # no-alloc fixed size storage structures
 heapless = { version = "0.8.0", default-features = false }
@@ -79,3 +82,8 @@ incremental = false
 lto = 'fat'
 opt-level = 's'
 overflow-checks = false
+
+[patch.crates-io]
+# rotary-encoder-hal = { git = "https://github.com/Sycrosity/rotary-encoder-hal" }
+
+# rotary-encoder-hal = { path = "../../../embedded/rotary-encoder-hal" }
